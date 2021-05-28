@@ -9,39 +9,43 @@ const bodyParser = require('body-parser');
  * Vars
  */
 const app = express();
-const port = 10111;
+const port = 3000;
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const redis = require("socket.io-redis");
+
+
+
 /*
  * Express
  */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-/*
- * Socket.io
+/**
+ * Socket
  */
+
+var net = require('net');
+
+var client = new net.Socket();
+client.connect(10111, '127.0.0.1', function() {
+console.log('Connected');
+});
+
+client.on('error', function(err) {
+console.error('Connection error: ' + err);
+console.error(new Error().stack);
+});
+
+client.on('data', function(data) {
+console.log('Received: ' + data);
+});
+
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', function(socket) {
-    console.log('Client connected to the WebSocket');
-  
-    socket.on('disconnect', () => {
-      console.log('Client disconnected');
-    });
-  
-    socket.on('chat message', function(msg) {
-      console.log("Received a chat message");
-      io.emit('chat message', msg);
-    });
-})
-
-http.listen(process.env.PORT || 10111, function() {
-    console.log('App listening on port' + ' ' + port)
+http.listen(process.env.PORT || 3000, function() {
+  console.log('App listening on port' + ' ' + port)
 });
-
-
-
-
