@@ -14,18 +14,18 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const redis = require("socket.io-redis");
 
-
-
 /*
  * Express
  */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
 /**
  * Socket
  */
-
 var net = require('net');
 
 var client = new net.Socket();
@@ -42,9 +42,6 @@ client.on('data', function(data) {
 console.log('Received: ' + data);
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
 
 http.listen(process.env.PORT || 3000, function() {
   console.log('App listening on port' + ' ' + port)
