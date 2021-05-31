@@ -7,13 +7,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const socketIo = require("socket.io");
 const http = require('http');
+const net = require('net');
 
 /*
  * Vars
  */
 const app = express();
 const server = http.createServer(app);
-console.log(`server`, server)
 const io = socketIo(server, {
   cors: {
     origin: "http://localhost:8080",
@@ -41,40 +41,49 @@ app.use((request, response, next) => {
 app.use(cors('*'));
 
 /**
+ * get the infos from multiplexer
+ */
+
+const client = new net.Socket();
+
+client.connect(10111, '127.0.0.1', function() {
+  console.log('Connected data to back');
+});
+
+client.on('error', function(err) {
+  console.error('Connection error: ' + err);
+  console.error(new Error().stack);
+});
+
+// let myData = [];
+client.on('data', function(data) {
+  console.log('Received: ' + data);
+  // myData.push(data);
+  client.emit('test', {msg : data})
+});
+
+
+
+// app.get('/', (request, response) => {
+//   console.log(`myData`, myData[myData.length - 1])
+//   response.send('VMS server' + myData[myData.length - 1]);
+// });
+
+/**
  * Socket / send infos to the front
  */
 
-io.on("connection", (socket) => {
-  console.log('>> socket.io - connected');
-  socket.on('messages', function(data) {
-    console.log(data);
- });
-});
-
-io.on("connection", function(socket) {
-  console.log(socket.conn.remoteAddress);
-});
-
-
-/**
- * get the infos from multiplexer
- */
-// const net = require('net');
-
-// const client = new net.Socket();
-// client.connect(3000, '127.0.0.1', function() {
-//   console.log('Connected');
+// io.on("connection", (socket) => {
+//   console.log('>> socket.io - connected');
+//   console.log(`myData`, myData[myData.length - 1])
+//   socket.on('data', (message) => {
+//     io.emit('data', message);
+//   });
 // });
 
-// client.on('error', function(err) {
-//   console.error('Connection error: ' + err);
-//   console.error(new Error().stack);
+// io.on("connection", function(socket) {
+//   console.log(socket.conn.remoteAddress);
 // });
-
-// client.on('data', function(data) {
-//   console.log('Received: ' + data);
-// });
-
 
 /**
  * server listener
