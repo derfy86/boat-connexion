@@ -5,11 +5,13 @@ import React from 'react';
 import './style.scss';
 
 // == Composant
-const MessageData = () => (
+const MessageData = ({data}) => {
+  console.log(`data`, data)
+  return(
   <>
-    <h1>data</h1>
+    <h1>data = {data.coords}</h1>
   </>
-);
+);}
 
 // == Export
 export default MessageData;
