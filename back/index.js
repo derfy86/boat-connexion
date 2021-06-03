@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 /*
  * Require
  */
@@ -58,9 +57,8 @@ client.on('error', function(err) {
   console.error(new Error().stack);
 });
 
-let myData = [];
+let lastData = {};
 client.on('data', function(data) {
-  // console.log('Received: ' + data);
   const raw = data.toString().split(','); //'$GPRMC,100803.76,A,3540.8323100,N,13946.1512988,E,16.3,25.3,020621,173.1,W,A,S*23'
 
   let converted; // convert to decimal
@@ -123,20 +121,17 @@ client.on('data', function(data) {
     mode: mode,
     ChecksumData: raw[13].substring(0,4),
   }
-  console.log(`dataParsed`, dataParsed)
-  myData.push(dataParsed);
-  // client.emit('test', {msg : data})
+  lastData = dataParsed;
 });
 
 /**
- * Socket / send infos to the front
+ * Socket / send the last parsed data to the front
  */
 io.on("connection", (socket) => {
   console.log('>> socket.io - connected');
-  // console.log(`myData`, myData[myData.length - 1])
-  socket.on('data', (message) => {
-    io.emit('data', message);
-  });
+  setInterval(() => {
+    socket.emit('data', lastData)
+  }, 1000);
 });
 
 io.on("connection", function(socket) {
