@@ -7,61 +7,61 @@ import './style.scss';
 // == Composant
 const Mapping = () => {
   useEffect(() => {
-    const script = document.createElement('script');
+    const scriptBundleMap = document.createElement('script');
 
-    script.src = 'https://js.api.here.com/v3/3.1/mapsjs.bundle.js';
-    script.type = 'module';
-    script.async = true;
+    scriptBundleMap.src = 'https://js.api.here.com/v3/3.1/mapsjs.bundle.js';
+    scriptBundleMap.type = 'module';
+    scriptBundleMap.async = true;
 
-    document.body.appendChild(script);
+    const scriptMapClassic = document.createElement('script');
+    scriptMapClassic.src = 'https://js.api.here.com/v3/3.1/mapsjs-core.js';
+    scriptMapClassic.type = 'text/javascript';
+    scriptMapClassic.charset = 'utf8';
+
+    const scriptMapClassicSecond = document.createElement('script');
+    scriptMapClassicSecond.src = 'https://js.api.here.com/v3/3.1/mapsjs-service.js';
+    scriptMapClassicSecond.type = 'text/javascript';
+    scriptMapClassicSecond.charset = 'utf8';
+
+    document.body.appendChild(scriptBundleMap);
+    document.body.appendChild(scriptMapClassic);
+    document.body.appendChild(scriptMapClassicSecond);
 
     return () => {
-      document.body.removeChild(script);
+      document.body.removeChild(scriptBundleMap);
+      document.body.removeChild(scriptMapClassic);
+      document.body.removeChild(scriptMapClassicSecond);
     };
   }, []);
-  //   /**
-  //  * Moves the map to display over Berlin
-  //  *
-  //  * @param  {H.Map} map      A HERE Map instance within the application
-  //  */
-  //   function moveMapToBerlin(map) {
-  //     map.setCenter({ lat: 52.5159, lng: 13.3777 });
-  //     map.setZoom(14);
-  //   }
 
-  //   /**
-  //  * Boilerplate map initialization code starts below:
-  //  */
+  /**
+   * @param  {H.Map} map      A HERE Map instance within the application
+   */
+  function moveMapToBerlin(map) {
+    map.setCenter({ lat: 52.5159, lng: 13.3777 });
+    map.setZoom(14);
+  }
 
-  //   // Step 1: initialize communication with the platform
-  //   // In your own code, replace variable window.apikey with your own apikey
-  //   const platform = new H.service.Platform({
-  //     apikey: window.apikey,
+  const platform = new H.service.Platform({
+    apikey: window.apikey,
+  });
+  const defaultLayers = platform.createDefaultLayers();
+
+  // const map = new H.Map(document.getElementById('map'),
+  //   defaultLayers.vector.normal.map, {
+  //     center: { lat: 50, lng: 5 },
+  //     zoom: 4,
+  //     pixelRatio: window.devicePixelRatio || 1,
   //   });
-  //   const defaultLayers = platform.createDefaultLayers();
+  // window.addEventListener('resize', () => map.getViewPort().resize());
 
-  //   // Step 2: initialize a map - this map is centered over Europe
-  //   const map = new H.Map(document.getElementById('map'),
-  //     defaultLayers.vector.normal.map, {
-  //       center: { lat: 50, lng: 5 },
-  //       zoom: 4,
-  //       pixelRatio: window.devicePixelRatio || 1,
-  //     });
-  //   // add a resize listener to make sure that the map occupies the whole container
-  //   window.addEventListener('resize', () => map.getViewPort().resize());
+  // const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-  //   // Step 3: make the map interactive
-  //   // MapEvents enables the event system
-  //   // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-  //   const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+  // const ui = H.ui.UI.createDefault(map, defaultLayers);
 
-  //   // Create the default UI components
-  //   const ui = H.ui.UI.createDefault(map, defaultLayers);
-
-  //   // Now use the map as required...
-  //   window.onload = function () {
-  //     moveMapToBerlin(map);
-  //   };
+  // window.onload = function () {
+  //   moveMapToBerlin(map);
+  // };
 
   return (
     <div className="map">
