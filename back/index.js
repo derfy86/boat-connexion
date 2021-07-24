@@ -130,7 +130,8 @@ client.on('data', function(data) {
 io.on("connection", (socket) => {
   console.log('>> socket.io - connected');
   setInterval(() => {
-    socket.emit('data', lastData)
+    console.log(`lastData`, lastData);
+    socket.emit('data', lastData);
   }, 1000);
 });
 

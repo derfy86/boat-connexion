@@ -1,8 +1,13 @@
 @use 'reset';
 @use 'vars';
 
+@import "src/styles/vars";
+
+
 body {
-  font-family: sans-serif;
+  font-family: $font;
+  background-color: black;
+  color: white;
 }
 
 /* 

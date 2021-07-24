@@ -1,9 +1,18 @@
+@import "src/styles/vars";
+
 .app {
-  width: 500px;
-  margin: 1em auto;
+  width: 100%;
+  margin: 3rem auto;
   text-align: center;
+  
+  &__title {
+    font-size: 2em;
+    font-family: $font;
+    font-weight: bold
+  }
 }
 
 .app img {
   max-width: 150px;
+
 }
