@@ -1,6 +1,7 @@
 // == Import npm
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 // == Import
 import './style.scss';
@@ -13,17 +14,17 @@ const MessageData = ({ data }) => {
   if (data.speed) {
     speed = data.speed.knots;
   }
-  useEffect(() => {
-    axios.get('https://maps.googleapis.com/maps/api/staticmap?center=40.714%2c%20-73.998&zoom=12&size=400x400&key=AIzaSyAZwZdeAzzPoFFWFQT1VcRErvxdODQlHFA')
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .then(() => {
-      });
-  });
+  // useEffect(() => {
+  //   axios.get('https://maps.googleapis.com/maps/api/staticmap?center=40.714%2c%20-73.998&zoom=12&size=400x400&key=AIzaSyAZwZdeAzzPoFFWFQT1VcRErvxdODQlHFA')
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
+  //     .then(() => {
+  //     });
+  // });
   return (
     <div className="data">
       <div className="data__content">
@@ -52,6 +53,10 @@ const MessageData = ({ data }) => {
       </div>
     </div>
   );
+};
+
+MessageData.propTypes = {
+  data: PropTypes.object.isRequired,
 };
 
 // == Export

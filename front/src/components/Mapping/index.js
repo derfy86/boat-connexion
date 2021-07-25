@@ -6,46 +6,64 @@ import './style.scss';
 
 // == Composant
 const Mapping = () => {
+  // useEffect(() => {
+  //   const scriptBundleMap = document.createElement('script');
+
+  //   scriptBundleMap.src = 'https://js.api.here.com/v3/3.1/mapsjs.bundle.js';
+  //   scriptBundleMap.type = 'module';
+  //   scriptBundleMap.async = true;
+
+  //   const scriptMapClassic = document.createElement('script');
+  //   scriptMapClassic.src = 'https://js.api.here.com/v3/3.1/mapsjs-core.js';
+  //   scriptMapClassic.type = 'text/javascript';
+  //   scriptMapClassic.charset = 'utf8';
+
+  //   const scriptMapClassicSecond = document.createElement('script');
+  //   scriptMapClassicSecond.src = 'https://js.api.here.com/v3/3.1/mapsjs-service.js';
+  //   scriptMapClassicSecond.type = 'text/javascript';
+  //   scriptMapClassicSecond.charset = 'utf8';
+
+  //   document.body.appendChild(scriptBundleMap);
+  //   document.body.appendChild(scriptMapClassic);
+  //   document.body.appendChild(scriptMapClassicSecond);
+
+  //   return () => {
+  //     document.body.removeChild(scriptBundleMap);
+  //     document.body.removeChild(scriptMapClassic);
+  //     document.body.removeChild(scriptMapClassicSecond);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    const scriptBundleMap = document.createElement('script');
+    const mapDiv = document.createElement('div');
+    mapDiv.id = 'mapContainer';
+    mapDiv.style = 'width: 640px; height: 480px';
 
-    scriptBundleMap.src = 'https://js.api.here.com/v3/3.1/mapsjs.bundle.js';
-    scriptBundleMap.type = 'module';
-    scriptBundleMap.async = true;
-
-    const scriptMapClassic = document.createElement('script');
-    scriptMapClassic.src = 'https://js.api.here.com/v3/3.1/mapsjs-core.js';
-    scriptMapClassic.type = 'text/javascript';
-    scriptMapClassic.charset = 'utf8';
-
-    const scriptMapClassicSecond = document.createElement('script');
-    scriptMapClassicSecond.src = 'https://js.api.here.com/v3/3.1/mapsjs-service.js';
-    scriptMapClassicSecond.type = 'text/javascript';
-    scriptMapClassicSecond.charset = 'utf8';
-
-    document.body.appendChild(scriptBundleMap);
-    document.body.appendChild(scriptMapClassic);
-    document.body.appendChild(scriptMapClassicSecond);
-
-    return () => {
-      document.body.removeChild(scriptBundleMap);
-      document.body.removeChild(scriptMapClassic);
-      document.body.removeChild(scriptMapClassicSecond);
-    };
+    document.body.appendChild(mapDiv);
   }, []);
 
-  /**
-   * @param  {H.Map} map      A HERE Map instance within the application
-   */
-  function moveMapToBerlin(map) {
-    map.setCenter({ lat: 52.5159, lng: 13.3777 });
-    map.setZoom(14);
-  }
+  // /**
+  //  * @param  {H.Map} map      A HERE Map instance within the application
+  //  */
+  // function moveMapToBerlin(map) {
+  //   map.setCenter({ lat: 52.5159, lng: 13.3777 });
+  //   map.setZoom(14);
+  // }
 
   const platform = new H.service.Platform({
-    apikey: window.apikey,
+    apikey: 'mRa18razqDghDuqDDufyqlNkUi06rKoomA-njumFuYw',
   });
+
   const defaultLayers = platform.createDefaultLayers();
+
+  // const map = new H.Map(
+  //   document.getElementById('mapContainer'),
+  //   defaultLayers.vector.normal.map,
+  //   {
+  //     zoom: 10,
+  //     center: { lat: 52.5, lng: 13.4 },
+  //   },
+  // );
 
   // const map = new H.Map(document.getElementById('map'),
   //   defaultLayers.vector.normal.map, {
