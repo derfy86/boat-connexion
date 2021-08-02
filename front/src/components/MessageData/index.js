@@ -9,7 +9,7 @@ import ReactSpeedometer from 'react-d3-speedometer';
 
 // == Composant
 const MessageData = ({ data }) => {
-  console.log('data', data);
+  // console.log('data', data);
   let speed;
   if (data.speed) {
     speed = data.speed.knots;
