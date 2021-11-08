@@ -29,7 +29,7 @@ const App = () => {
     <div className="app">
       <h1 className="app__title">Dashboard type = {data.type}</h1>
       <MessageData data={data} />
-      <Mapping data={data} />
+      {/* <Mapping data={data} /> */}
       <div style={{ width: '100%', height: '800px' }} id="mapContainer" />
 
     </div>

@@ -48,7 +48,7 @@ app.use(cors('*'));
  */
 const client = new net.Socket();
 
-client.connect(10111, '127.0.0.1', function() {
+client.connect(10110, '127.0.0.1', function() {
   console.log('Connected data to back');
 });
 
@@ -119,7 +119,7 @@ client.on('data', function(data) {
     date: raw[9].substring(0,2) + '.' + raw[9].substring(2,4) + '.' + raw[9].substring(4,6),
     magneticVariation: magneticVariation,
     mode: mode,
-    ChecksumData: raw[13].substring(0,4),
+    // ChecksumData: raw[13].substring(0,4),
   }
   lastData = dataParsed;
 });
