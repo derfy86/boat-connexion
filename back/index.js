@@ -7,7 +7,6 @@ const cors = require('cors');
 const socketIo = require("socket.io");
 const http = require('http');
 const net = require('net');
-const dateFormat = require("dateformat");
 const convert = require('geo-coordinates-parser');
 const formatcoords = require('formatcoords');
 const GeoJSON = require('geojson');
@@ -32,8 +31,6 @@ const corsOptions = {
 /*
  * Express
  */
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*');
   // response.header('Access-Control-Allow-Credentials', true);
@@ -57,12 +54,12 @@ client.on('error', function(err) {
   console.error(new Error().stack);
 });
 
-let lastData = {};
+let dataParsedRMC;
 client.on('data', function(data) {
   const raw = data.toString().split(','); //'$GPRMC,100803.76,A,3540.8323100,N,13946.1512988,E,16.3,25.3,020621,173.1,W,A,S*23'
   if (raw[0] === '$GPRMC') {
-    const dataParsedRMC = parseToRMC(raw);
-    lastData = dataParsedRMC;
+    dataParsedRMC = parseToRMC(raw);
+    return dataParsedRMC;
   }
   
 });
@@ -73,8 +70,8 @@ client.on('data', function(data) {
 io.on("connection", (socket) => {
   console.log('>> socket.io - connected');
   setInterval(() => {
-    console.log(`lastData`, lastData);
-    socket.emit('data', lastData);
+    console.log(`dataParsedRMC`, dataParsedRMC);
+    socket.emit('data', dataParsedRMC);
   }, 1000);
 });
 
