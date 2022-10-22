@@ -1,15 +1,9 @@
-// == Import npm
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
+import { useEffect } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
+import "./style.scss";
 
-// == Import
-import './style.scss';
-import ReactSpeedometer from 'react-d3-speedometer';
-
-// == Composant
 const MessageData = ({ data }) => {
-  // console.log('data', data);
   let speed;
   if (data.speed) {
     speed = data.speed.knots;
@@ -35,13 +29,14 @@ const MessageData = ({ data }) => {
         <p className="data__text">mode = {data.mode}</p>
         <p className="data__text">geoJson = {data.geoloc}</p>
       </div>
-      <div style={{
-        width: '500px',
-        height: '300px',
-        background: 'black',
-      }}
+      <div
+        style={{
+          width: "500px",
+          height: "300px",
+          background: "black",
+        }}
       >
-        <ReactSpeedometer
+        {/* <ReactSpeedometer
           fluidWidth
           minValue={0}
           maxValue={30}
@@ -49,7 +44,7 @@ const MessageData = ({ data }) => {
           currentValueText="knots"
           maxSegmentLabels={5}
           segments={1000}
-        />
+        /> */}
       </div>
     </div>
   );
@@ -59,5 +54,4 @@ MessageData.propTypes = {
   data: PropTypes.object.isRequired,
 };
 
-// == Export
 export default MessageData;
