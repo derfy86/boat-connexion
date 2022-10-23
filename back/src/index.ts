@@ -1,27 +1,28 @@
 /*
  * Require
  */
-const express = require("express");
-const cors = require("cors");
-const socketIo = require("socket.io");
-const http = require("http");
-const net = require("net");
+import express from "express";
+import cors from "cors";
+import socketIo, { ServerOptions } from "socket.io";
+import http from "http";
+import net from "net";
+import formatcoords from "formatcoords";
+import geoJSON from "geojson";
+
 const convert = require("geo-coordinates-parser");
-const formatcoords = require("formatcoords");
-const GeoJSON = require("geojson");
 
 /*
  * Vars
  */
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
+const io: any = socketIo(server, {
   cors: {
     origin: "http://localhost:8080",
     methods: ["GET", "POST"],
   },
 });
-const port = 3000;
+const port = Number(process.env.PORT) || 3001;
 const corsOptions = {
   origin: "http://localhost:8080",
   optionsSuccessStatus: 200,
@@ -43,7 +44,7 @@ app.use((request, response, next) => {
   );
   next();
 });
-app.use(cors("*"));
+app.use(cors());
 
 /**
  * get the infos from multiplexer
@@ -59,7 +60,7 @@ client.on("error", function (err) {
   console.error(new Error().stack);
 });
 
-let dataParsedRMC;
+let dataParsedRMC: any;
 client.on("data", function (data) {
   const raw = data.toString().split(","); //'$GPRMC,100803.76,A,3540.8323100,N,13946.1512988,E,16.3,25.3,020621,173.1,W,A,S*23'
   if (raw[0] === "$GPRMC") {
@@ -71,7 +72,7 @@ client.on("data", function (data) {
 /**
  * Socket / send the last parsed data to the front
  */
-io.on("connection", (socket) => {
+io.on("connection", (socket: any) => {
   console.log(">> socket.io - connected");
   setInterval(() => {
     console.log(`dataParsedRMC`, dataParsedRMC);
@@ -79,18 +80,18 @@ io.on("connection", (socket) => {
   }, 1000);
 });
 
-io.on("connection", function (socket) {
+io.on("connection", function (socket: any) {
   console.log(socket.conn.remoteAddress);
 });
 
 /**
  * server listener
  */
-server.listen(process.env.PORT || 3001, "127.0.0.1", function () {
+server.listen(port, "127.0.0.1", function () {
   console.log("App listening on port" + " " + port);
 });
 
-function parseToRMC(raw) {
+function parseToRMC(raw: any) {
   let converted; // convert to decimal
   let format; // beautify the coords
   let geoJsonIo;
@@ -111,7 +112,7 @@ function parseToRMC(raw) {
         lng: converted.decimalLongitude,
       },
     ];
-    const geo = GeoJSON.parse(geoLoc, { Point: ["lat", "lng"] });
+    const geo = geoJSON.parse(geoLoc, { Point: ["lat", "lng"] });
     geoJsonIo = JSON.stringify(geo); // to check on map by geojson.io
   } catch {
     console.log("bad getaway");
@@ -148,7 +149,7 @@ function parseToRMC(raw) {
   return dataParsedRMC;
 }
 
-function checkTypeMode(raw) {
+function checkTypeMode(raw: any) {
   let mode;
   switch (raw) {
     case "A":
