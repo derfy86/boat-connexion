@@ -1,14 +1,16 @@
 import formatcoords from "formatcoords";
-// import geoJSON from "geojson";
-
-const geoJSON = require("geoJSON");
-const convert = require("geo-coordinates-parser");
+import { GeoJSON } from "geojson";
+import convert from "geo-coordinates-parser";
+const geoJSON = require("geojson");
 
 export default class ParserService {
-  public parseToRMC(raw: any) {
-    let converted: any; // convert to decimal
+  public static parseToRMC(raw: string[]) {
+    let converted: {
+      decimalLatitude: [number, number];
+      decimalLongitude: boolean;
+    }; // convert to decimal
     let format: string; // beautify the coords
-    let geoJsonIo: any;
+    let geoJsonIo: string;
     try {
       const convertFully = raw[3] + raw[4] + " " + raw[5] + raw[6];
       converted = convert(convertFully);
@@ -26,13 +28,13 @@ export default class ParserService {
           lng: converted.decimalLongitude,
         },
       ];
-      const geo = geoJSON.parse(geoLoc, { Point: ["lat", "lng"] });
+      const geo: GeoJSON = geoJSON.parse(geoLoc, { Point: ["lat", "lng"] });
       geoJsonIo = JSON.stringify(geo); // to check on map by geojson.io
     } catch {
       console.log("bad getaway");
     }
 
-    let mode = this.checkTypeMode(raw[12].substring(0, 1));
+    let mode: string = this.checkTypeMode(raw[12].substring(0, 1));
 
     const magneticVariation =
       raw[10] && raw[11] !== undefined ? raw[10] + "," + raw[11] : "none";
@@ -50,7 +52,7 @@ export default class ParserService {
       geoloc: geoJsonIo,
       speed: {
         knots: Number(raw[7]),
-        Kmh: Number((raw[7] * 1.852).toFixed(2)),
+        Kmh: Number((Number(raw[7]) * 1.852).toFixed(2)),
       },
       track: raw[8],
       date:
@@ -66,33 +68,24 @@ export default class ParserService {
     return dataParsedRMC;
   }
 
-  private checkTypeMode(raw: any) {
-    let mode;
+  private static checkTypeMode(raw: string): string {
     switch (raw) {
       case "A":
-        mode = "autonomous";
-        break;
+        return "autonomous";
       case "D":
-        mode = "differential";
-        break;
+        return "differential";
       case "E":
-        mode = "estimated";
-        break;
+        return "estimated";
       case "M":
-        mode = "manual input";
-        break;
+        return "manual input";
       case "S":
-        mode = "simulated";
-        break;
+        return "simulated";
       case "N":
-        mode = "data not valid";
-        break;
+        return "data not valid";
       case "P":
-        mode = "precise";
-        break;
+        return "precise";
       default:
-        mode = "none";
+        return "none";
     }
-    return mode;
   }
 }

@@ -51,7 +51,7 @@ const init = () => {
   client.on("data", function (data) {
     const raw = data.toString().split(","); //'$GPRMC,100803.76,A,3540.8323100,N,13946.1512988,E,16.3,25.3,020621,173.1,W,A,S*23'
     if (raw[0] === "$GPRMC") {
-      dataParsedRMC = this.parserService.parseToRMC(raw);
+      dataParsedRMC = parserService.parseToRMC(raw);
       return dataParsedRMC;
     }
   });
