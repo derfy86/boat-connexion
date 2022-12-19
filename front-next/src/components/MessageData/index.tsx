@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import axios from "axios";
+import ReactSpeedometer from "react-d3-speedometer";
 import PropTypes from "prop-types";
 import "./style.scss";
+import { DataParsedRMC } from "../../../../back/src/modules/services/parser.interface";
 
 const MessageData = ({ data }) => {
-  let speed;
+  let speed: number;
   if (data.speed) {
     speed = data.speed.knots;
   }
@@ -36,7 +38,7 @@ const MessageData = ({ data }) => {
           background: "black",
         }}
       >
-        {/* <ReactSpeedometer
+        <ReactSpeedometer
           fluidWidth
           minValue={0}
           maxValue={30}
@@ -44,7 +46,7 @@ const MessageData = ({ data }) => {
           currentValueText="knots"
           maxSegmentLabels={5}
           segments={1000}
-        /> */}
+        />
       </div>
     </div>
   );
